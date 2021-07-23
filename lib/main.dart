@@ -1,17 +1,36 @@
 import 'package:flutter/material.dart';
-//import 'package:firebase_core/firebase_core.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
   MyApp createState() => MyApp();
+
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
+  Future<dynamic> getData() async {
+    final DocumentReference document =
+        FirebaseFirestore.instance.collection('Item').doc('1');
+
+    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
+      return snapshot.data;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    var x = getData();
+
     final title = 'Daftar Barang';
+
+    log('data: $x');
+
     return MaterialApp(
         title: title,
         home: Scaffold(
